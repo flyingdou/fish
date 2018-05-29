@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.FishingTicketMapper" >
+  <resultMap id="BaseResultMap" type="com.fish.pojo.FishingTicket" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="poster" property="poster" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="period" property="period" jdbcType="INTEGER" />
+    <result column="fit_fish_ground" property="fitFishGround" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="creator" property="creator" jdbcType="INTEGER" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="is_open" property="isOpen" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="auto_date" property="auto_date" jdbcType="TIMESTAMP" />
+    <result column="card_id" property="cardId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, poster, name, period, fit_fish_ground, price, creator, remark, is_open, status, 
+    auto_date, card_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_fishing_ticket
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_fishing_ticket
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.pojo.FishingTicket" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_fishing_ticket
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="poster != null" >
+        poster,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="period != null" >
+        period,
+      </if>
+      <if test="fitFishGround != null" >
+        fit_fish_ground,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="creator != null" >
+        creator,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="isOpen != null" >
+        is_open,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="auto_date != null" >
+        auto_date,
+      </if>
+      <if test="cardId != null" >
+        card_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="poster != null" >
+        #{poster,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        #{period,jdbcType=INTEGER},
+      </if>
+      <if test="fitFishGround != null" >
+        #{fitFishGround,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null" >
+        #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null" >
+        #{isOpen,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auto_date != null" >
+        #{auto_date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardId != null" >
+        #{cardId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.FishingTicket" >
+    update tb_fishing_ticket
+    <set >
+      <if test="poster != null" >
+        poster = #{poster,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="period != null" >
+        period = #{period,jdbcType=INTEGER},
+      </if>
+      <if test="fitFishGround != null" >
+        fit_fish_ground = #{fitFishGround,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="creator != null" >
+        creator = #{creator,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="isOpen != null" >
+        is_open = #{isOpen,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="auto_date != null" >
+        auto_date = #{auto_date,jdbcType=TIMESTAMP},
+      </if>
+      <if test="cardId != null" >
+        card_id = #{cardId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 通过创建者查询卡券列表 -->
+  <select id="getTicketListByCreator" parameterType="Map" resultType="Map">
+  	select t.*,(select count(id) from tb_order where product_type = #{productType} and product_id = t.id) sell_out,
+	(select count(id) from tb_fishing_ground where id in(t.fit_fish_ground)) fit_fish_gound_count
+	from (select id,poster,name,period,fit_fish_ground,price,creator,remark,status,auto_date 
+	from tb_fishing_ticket where is_open = #{isOpen} and creator = #{memberId}) t
+  </select>
+  
+  <!-- 查询有效的卡券列表(审核通过并且是开启状态) -->
+  <select id="getEffectiveTikcetList" parameterType="Map" resultType="Map">
+  	select t.*,(select count(id) from tb_order where product_type = #{productType} and product_id = t.id) sell_out,
+	(select count(id) from tb_fishing_ground where id in(t.fit_fish_ground)) fit_fish_gound_count
+	from (select id,poster,name,period,fit_fish_ground,price,creator,remark,auto_date 
+	from tb_fishing_ticket where is_open = #{isOpen} and `status` = #{status}) t
+  </select>
+  
+  <!-- 通过id查询卡券详细信息 -->
+  <select id="getTicketById" parameterType="Map" resultType="Map">
+  	select t.*,(select count(id) from tb_order where product_type = #{productType} and product_id = t.id) sell_out,
+	(select count(id) from tb_fishing_ground where id in(t.fit_fish_ground)) fit_fish_gound_count
+	from (select ft.id,ft.poster,ft.name,ft.period,ft.fit_fish_ground,ft.price,u.nick creator,ft.remark,
+	ft.auto_date 	from tb_fishing_ticket ft inner join tb_user u on ft.creator = u.id where ft.id = #{ticketId}) t
+  </select>
+</mapper>

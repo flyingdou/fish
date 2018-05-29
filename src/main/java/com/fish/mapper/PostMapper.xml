@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.PostMapper" >
+  <resultMap id="BaseResultMap" type="com.fish.pojo.Post" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user" property="user" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="video_url" property="videoUrl" jdbcType="VARCHAR" />
+    <result column="fishing_method" property="fishingMethod" jdbcType="VARCHAR" />
+    <result column="fishing_grain" property="fishingGrain" jdbcType="VARCHAR" />
+    <result column="poster_date" property="posterDate" jdbcType="TIMESTAMP" />
+    <result column="fishing_logs" property="fishingLogs" jdbcType="INTEGER" />
+    <result column="reward_amount" property="rewardAmount" jdbcType="INTEGER" />
+    <result column="longitude" property="longitude" jdbcType="DOUBLE" />
+    <result column="latitude" property="latitude" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user, content, video_url, fishing_method, fishing_grain, poster_date, fishing_logs, 
+    reward_amount, longitude, latitude
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_post
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_post
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.pojo.Post" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_post
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="videoUrl != null" >
+        video_url,
+      </if>
+      <if test="fishingMethod != null" >
+        fishing_method,
+      </if>
+      <if test="fishingGrain != null" >
+        fishing_grain,
+      </if>
+      <if test="posterDate != null" >
+        poster_date,
+      </if>
+      <if test="fishingLogs != null" >
+        fishing_logs,
+      </if>
+      <if test="rewardAmount != null" >
+        reward_amount,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingMethod != null" >
+        #{fishingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingGrain != null" >
+        #{fishingGrain,jdbcType=VARCHAR},
+      </if>
+      <if test="posterDate != null" >
+        #{posterDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fishingLogs != null" >
+        #{fishingLogs,jdbcType=INTEGER},
+      </if>
+      <if test="rewardAmount != null" >
+        #{rewardAmount,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.Post" >
+    update tb_post
+    <set >
+      <if test="user != null" >
+        user = #{user,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="videoUrl != null" >
+        video_url = #{videoUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingMethod != null" >
+        fishing_method = #{fishingMethod,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingGrain != null" >
+        fishing_grain = #{fishingGrain,jdbcType=VARCHAR},
+      </if>
+      <if test="posterDate != null" >
+        poster_date = #{posterDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fishingLogs != null" >
+        fishing_logs = #{fishingLogs,jdbcType=INTEGER},
+      </if>
+      <if test="rewardAmount != null" >
+        reward_amount = #{rewardAmount,jdbcType=INTEGER},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=DOUBLE},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

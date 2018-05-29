@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context-3.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-3.2.xsd">
+
+	<!-- 默认的注解映射的支持 -->
+	<!-- 自动注册DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter -->
+	<mvc:annotation-driven>
+		<mvc:message-converters
+			register-defaults="true">
+			<bean
+				class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes"
+					value="text/plain;charset=UTF-8" />
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<!-- 扫描controller包下所有使用注解的类 -->
+	<context:component-scan
+		base-package="com.fish.controller" />
+
+	<!-- 配置静态资源，直接映射到对应的文件夹，不被DispatcherServlet处理，3.04新增功能，需要重新设置spring-mvc-3.0.xsd -->
+	<!-- 如果web.xml过滤全部页面就需要配置静态资源,否则不需要 -->
+	<mvc:resources mapping="/img/*" location="/img/" />
+	<mvc:resources mapping="/js/*" location="/js/" />
+	<mvc:resources mapping="/css/*" location="/css/" />
+	<mvc:resources mapping="/upload/*" location="/upload/" />
+
+	<!-- 配置springMVC视图解析器 -->
+	<bean id="jspViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+
+	<!-- SpringMVC上传文件时,需配置MultipartResolver处理器 -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<!-- 指定所上传文件的总大小单位kb......注意maxUploadSize属性的限制不是针对单个文件,而是所有文件的容量之和 -->
+		<property name="maxUploadSize" value="8000000" />
+	</bean>
+
+	<!-- SpringMVC在超出上传文件限制时,会抛出org.springframework.web.multipart.MaxUploadSizeExceededException -->
+	<!-- 该异常是SpringMVC在检查上传的文件信息时抛出来的,而且此时还没有进入到Controller方法中 -->
+	<bean id="exceptionResolver"
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 遇到MaxUploadSizeExceededException异常时,自动跳转到/WEB-INF/jsp/error_fileupload.jsp页面 -->
+				<prop
+					key="org.springframework.web.multipart.MaxUploadSizeExceededException">error_fileupload</prop>
+			</props>
+		</property>
+	</bean>
+</beans>

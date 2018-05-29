@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.fish.pojo.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="nick" property="nick" jdbcType="VARCHAR" />
+    <result column="image" property="image" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="register_date" property="registerDate" jdbcType="TIMESTAMP" />
+    <result column="login_date" property="loginDate" jdbcType="TIMESTAMP" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="county" property="county" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="frist_fishing_date" property="fristFishingDate" jdbcType="TIMESTAMP" />
+    <result column="tech_fee" property="techFee" jdbcType="INTEGER" />
+    <result column="telephone" property="telephone" jdbcType="VARCHAR" />
+    <result column="wechat_id" property="wechatId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, nick, image, sex, register_date, login_date, province, city, county, score, type, 
+    frist_fishing_date, tech_fee, telephone, wechat_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.pojo.User" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="nick != null" >
+        nick,
+      </if>
+      <if test="image != null" >
+        image,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="registerDate != null" >
+        register_date,
+      </if>
+      <if test="loginDate != null" >
+        login_date,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="county != null" >
+        county,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="fristFishingDate != null" >
+        frist_fishing_date,
+      </if>
+      <if test="techFee != null" >
+        tech_fee,
+      </if>
+      <if test="telephone != null" >
+        telephone,
+      </if>
+      <if test="wechatId != null" >
+        wechat_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="nick != null" >
+        #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginDate != null" >
+        #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fristFishingDate != null" >
+        #{fristFishingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="techFee != null" >
+        #{techFee,jdbcType=INTEGER},
+      </if>
+      <if test="telephone != null" >
+        #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatId != null" >
+        #{wechatId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.User" >
+    update tb_user
+    <set >
+      <if test="nick != null" >
+        nick = #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="image != null" >
+        image = #{image,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="registerDate != null" >
+        register_date = #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="loginDate != null" >
+        login_date = #{loginDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="county != null" >
+        county = #{county,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        score = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=VARCHAR},
+      </if>
+      <if test="fristFishingDate != null" >
+        frist_fishing_date = #{fristFishingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="techFee != null" >
+        tech_fee = #{techFee,jdbcType=INTEGER},
+      </if>
+      <if test="telephone != null" >
+        telephone = #{telephone,jdbcType=VARCHAR},
+      </if>
+      <if test="wechatId != null" >
+        wechat_id = #{wechatId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 根据wechatId查询用户 -->
+  <select id="getUserByWechatid" resultMap="BaseResultMap" parameterType="Map" >
+          select 
+           <include refid="Base_Column_List"/> 
+           from tb_user 
+           where wechat_id = #{wechat_id}
+  </select>
+  
+  
+  
+</mapper>

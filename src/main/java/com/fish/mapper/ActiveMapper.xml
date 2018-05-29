@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.ActiveMapper">
+	<resultMap id="BaseResultMap" type="com.fish.pojo.Active">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="poster" property="poster" jdbcType="VARCHAR" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="startTime" property="startTime" jdbcType="TIMESTAMP" />
+		<result column="endTime" property="endTime" jdbcType="TIMESTAMP" />
+		<result column="address" property="address" jdbcType="VARCHAR" />
+		<result column="telephone" property="telephone" jdbcType="VARCHAR" />
+		<result column="city" property="city" jdbcType="VARCHAR" />
+		<result column="creator" property="creator" jdbcType="INTEGER" />
+		<result column="upper_limit" property="upperLimit" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="INTEGER" />
+		<result column="remark" property="remark" jdbcType="VARCHAR" />
+		<result column="fishing_ground" property="fishingGround" jdbcType="INTEGER" />
+		<result column="auto_date" property="autoDate" jdbcType="TIMESTAMP" />
+		<result column="is_open" property="isOpen" jdbcType="INTEGER" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="recommend" property="recommend" jdbcType="INTEGER" />
+		<result column="recommend_date" property="recommendDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<!-- 公共sql -->
+	<sql id="Base_Column_List">
+		id, poster, name, startTime, endTime, address, telephone,
+		city, creator,
+		upper_limit upperLimit,
+		price, remark, fishing_ground
+		fishingGround, auto_date autoDate, is_open isOpen, status,
+		recommend, recommend_date recommendDate
+	</sql>
+
+	<!-- 添加一条活动数据 -->
+	<insert id="insertSelective"  parameterType="com.fish.pojo.Active" useGeneratedKeys="true" keyProperty="id">
+		insert into tb_active
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="poster != null and poster != '' ">
+				poster,
+			</if>
+			<if test="name != null  and name !='' ">
+				name,
+			</if>
+			<if test="startTime != null and startTime != '' ">
+				startTime,
+			</if>
+			<if test="endTime != null and endTime != '' ">
+				endTime,
+			</if>
+			<if test="address != null and address != '' ">
+				address,
+			</if>
+			<if test="telephone != null and telephone != '' ">
+				telephone,
+			</if>
+			<if test="city != null and city != '' ">
+				city,
+			</if>
+			<if test="creator != null and creator != '' ">
+				creator,
+			</if>
+			<if test="upperLimit != null and upperLimit != '' ">
+				upper_limit,
+			</if>
+			<if test="price != null and price != '' ">
+				price,
+			</if>
+			<if test="remark != null and remark != '' ">
+				remark,
+			</if>
+			<if test="fishingGround != null and fishingGround != '' ">
+				fishing_ground,
+			</if>
+			<if test="autoDate != null and autoDate != '' ">
+				auto_date,
+			</if>
+			<if test="isOpen != null and isOpen != '' ">
+				is_open,
+			</if>
+			<if test="status != null and tatus != '' ">
+				status,
+			</if>
+			<if test="recommend != null and recommend != '' ">
+				recommend,
+			</if>
+			<if test="recommendDate != null and recommendDate != '' ">
+				recommend_date,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="poster != null and poster != '' ">
+				#{poster,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null  and name != '' ">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="startTime != null and startTime != '' ">
+				#{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null  and endTime != '' ">
+				#{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null and address != '' ">
+				#{address,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null and telephone != '' ">
+				#{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null and city != null ">
+				#{city,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null and creator != '' ">
+				#{creator,jdbcType=INTEGER},
+			</if>
+			<if test="upperLimit != null and upperLimit != '' ">
+				#{upperLimit,jdbcType=INTEGER},
+			</if>
+			<if test="price != null and price != '' ">
+				#{price,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null and remark != '' ">
+				#{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="fishingGround != null and fishingGround != '' ">
+				#{fishingGround,jdbcType=INTEGER},
+			</if>
+			<if test="autoDate != null and autoDate != '' ">
+				#{autoDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isOpen != null and isOpen != '' ">
+				#{isOpen,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null and status != '' ">
+				#{status,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recommend != null and recommend != '' ">
+				#{recommend,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recommendDate != null and recommendDate != '' ">
+				#{recommendDate,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+
+	<!-- 通过id修改活动数据 -->
+	<update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.Active">
+		update tb_active
+		<set>
+			<if test="poster != null and poster != '' ">
+				poster = #{poster,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null and name != '' ">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="starttime != null and starttime != '' ">
+				startTime = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endtime != null and endtime != '' ">
+				endTime = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="address != null and address != '' ">
+				address = #{address,jdbcType=VARCHAR},
+			</if>
+			<if test="telephone != null and telephone != '' ">
+				telephone = #{telephone,jdbcType=VARCHAR},
+			</if>
+			<if test="city != null and city != '' ">
+				city = #{city,jdbcType=VARCHAR},
+			</if>
+			<if test="creator != null and creator != '' ">
+				creator = #{creator,jdbcType=INTEGER},
+			</if>
+			<if test="upperLimit != null and upperLimit != '' ">
+				upper_limit = #{upperLimit,jdbcType=INTEGER},
+			</if>
+			<if test="price != null and price != '' ">
+				price = #{price,jdbcType=INTEGER},
+			</if>
+			<if test="remark != null and remark != '' ">
+				remark = #{remark,jdbcType=VARCHAR},
+			</if>
+			<if test="fishingGround != null and fishingGround != '' ">
+				fishing_ground = #{fishingGround,jdbcType=INTEGER},
+			</if>
+			<if test="autoDate != null and autoDate != '' ">
+				auto_date = #{autoDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isOpen != null and isOpen != '' ">
+				is_open = #{isOpen,jdbcType=TIMESTAMP},
+			</if>
+			<if test="status != null and status != '' ">
+				status = #{status,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recommend != null and recommend != '' ">
+				recommend = #{recommend,jdbcType=TIMESTAMP},
+			</if>
+			<if test="recommendDate != null and recommendDate != '' ">
+				recommend_date = #{recommendDate,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 通过id删除活动数据 -->
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from tb_active
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+
+	<!-- 通过id查询活动数据 -->
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from tb_active
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 根据城市查询活动列表 -->
+	<select id="getActiveListByCity" parameterType="Map" resultType="Map">
+		select a.*,(select count(no) from tb_order where status > #{orderStatus}
+		and product_type = #{productType} and product_id = a.id) count from (select id,
+		poster, name, startTime, endTime, address, telephone,city, creator,
+		upper_limit upperLimit,price, remark, fishing_ground fishingGround,
+		auto_date autoDate from tb_active where city = #{city} and is_open = #{isOpen} 
+		and status = #{status} and recommend = #{recommend}  order by auto_date desc) a
+	</select>
+	
+	<!-- 根据推荐查询活动列表 -->
+	<select id="getActiveListByRecommend" parameterType="Map" resultType="Map">
+		select a.*,(select count(no) from tb_order where status > #{orderStatus}
+		and product_type = #{productType} and product_id = a.id) count from (select id,
+		poster, name, startTime, endTime, address, telephone,city, creator,
+		upper_limit upperLimit,price, remark, fishing_ground fishingGround,
+		auto_date autoDate from tb_active where is_open = #{isOpen} and status = #{status} 
+		and recommend = #{recommend} order by recommend_date desc) a
+	</select>
+	
+	<!-- 根据id查询活动信息 -->
+	<select id="getActiveById" parameterType="String" resultType="Map">
+		select a.*,(select count(no) from tb_order where status > #{orderStatus}
+		and product_type = #{productType} and product_id = a.id) count from (select id,
+		poster, name, startTime, endTime, address, telephone,city, creator,
+		upper_limit upperLimit,price, remark, fishing_ground fishingGround,
+		auto_date autoDate from tb_active where id = #{activeId}) a
+	</select>
+</mapper>

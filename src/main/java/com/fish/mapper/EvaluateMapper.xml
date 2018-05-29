@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.EvaluateMapper" >
+  <resultMap id="BaseResultMap" type="com.fish.pojo.Evaluate" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user" property="user" jdbcType="INTEGER" />
+    <result column="post" property="post" jdbcType="INTEGER" />
+    <result column="parent" property="parent" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="auto_date" property="autoDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user, post, parent, content, auto_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_evaluate
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_evaluate
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.pojo.Evaluate" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_evaluate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="post != null" >
+        post,
+      </if>
+      <if test="parent != null" >
+        parent,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="autoDate != null" >
+        auto_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=INTEGER},
+      </if>
+      <if test="post != null" >
+        #{post,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null" >
+        #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="autoDate != null" >
+        #{autoDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.Evaluate" >
+    update tb_evaluate
+    <set >
+      <if test="user != null" >
+        user = #{user,jdbcType=INTEGER},
+      </if>
+      <if test="post != null" >
+        post = #{post,jdbcType=INTEGER},
+      </if>
+      <if test="parent != null" >
+        parent = #{parent,jdbcType=INTEGER},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="autoDate != null" >
+        auto_date = #{autoDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

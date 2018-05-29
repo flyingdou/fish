@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fish.dao.SignMapper" >
+  <resultMap id="BaseResultMap" type="com.fish.pojo.Sign" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sign_date" property="signDate" jdbcType="TIMESTAMP" />
+    <result column="user" property="user" jdbcType="INTEGER" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="longitude" property="longitude" jdbcType="DECIMAL" />
+    <result column="latitude" property="latitude" jdbcType="DECIMAL" />
+    <result column="weather_status" property="weatherStatus" jdbcType="VARCHAR" />
+    <result column="temperature" property="temperature" jdbcType="VARCHAR" />
+    <result column="pressure" property="pressure" jdbcType="VARCHAR" />
+    <result column="wind_direction" property="windDirection" jdbcType="VARCHAR" />
+    <result column="fishing_ground" property="fishingGround" jdbcType="INTEGER" />
+    <result column="fishing_startTime" property="fishingStartTime" jdbcType="TIMESTAMP" />
+    <result column="fishing_endTime" property="fishingEndTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sign_date, user, address, longitude, latitude, weather_status, temperature, pressure, 
+    wind_direction, fishing_ground, fishing_startTime, fishing_endTime
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_sign
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tb_sign
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insertSelective" parameterType="com.fish.pojo.Sign" useGeneratedKeys="true" keyProperty="id">
+    insert into tb_sign
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="signDate != null" >
+        sign_date,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="longitude != null" >
+        longitude,
+      </if>
+      <if test="latitude != null" >
+        latitude,
+      </if>
+      <if test="weatherStatus != null" >
+        weather_status,
+      </if>
+      <if test="temperature != null" >
+        temperature,
+      </if>
+      <if test="pressure != null" >
+        pressure,
+      </if>
+      <if test="windDirection != null" >
+        wind_direction,
+      </if>
+      <if test="fishingGround != null" >
+        fishing_ground,
+      </if>
+      <if test="fishingStarttime != null" >
+        fishing_startTime,
+      </if>
+      <if test="fishingEndtime != null" >
+        fishing_endTime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="signDate != null" >
+        #{signDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="weatherStatus != null" >
+        #{weatherStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null" >
+        #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="pressure != null" >
+        #{pressure,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null" >
+        #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingGround != null" >
+        #{fishingGround,jdbcType=INTEGER},
+      </if>
+      <if test="fishingStarttime != null" >
+        #{fishingStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fishingEndtime != null" >
+        #{fishingEndtime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.fish.pojo.Sign" >
+    update tb_sign
+    <set >
+      <if test="signDate != null" >
+        sign_date = #{signDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=INTEGER},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="longitude != null" >
+        longitude = #{longitude,jdbcType=INTEGER},
+      </if>
+      <if test="latitude != null" >
+        latitude = #{latitude,jdbcType=INTEGER},
+      </if>
+      <if test="weatherStatus != null" >
+        weather_status = #{weatherStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="temperature != null" >
+        temperature = #{temperature,jdbcType=VARCHAR},
+      </if>
+      <if test="pressure != null" >
+        pressure = #{pressure,jdbcType=VARCHAR},
+      </if>
+      <if test="windDirection != null" >
+        wind_direction = #{windDirection,jdbcType=VARCHAR},
+      </if>
+      <if test="fishingGround != null" >
+        fishing_ground = #{fishingGround,jdbcType=INTEGER},
+      </if>
+      <if test="fishingStarttime != null" >
+        fishing_startTime = #{fishingStarttime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="fishingEndtime != null" >
+        fishing_endTime = #{fishingEndtime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -16,4 +16,11 @@ public interface FishingGroundService {
 	 * @return
 	 */
 	public JSONObject release(JSONObject param);
+
+	/**
+	 * 查询钓场列表
+	 * 
+	 * @return
+	 */
+	public JSONObject getFishingGroundList(JSONObject param);
 }

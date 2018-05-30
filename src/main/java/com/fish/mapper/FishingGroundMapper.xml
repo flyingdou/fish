@@ -227,4 +227,36 @@
   <select id="getFishingGroundListByIdList" parameterType="String" resultType="Map">
   	select id,name,poster from tb_fishing_ground where id in(#{_parameter})
   </select>
+  
+  <!-- 查询钓场列表 -->
+  <select id="getFishingGroundList" parameterType="Map" resultType="Map">
+  	select t.*, 
+	(select count(id) from tb_sign where fishing_ground = t.id) userCount,
+	(select count(l.fishing_count) from tb_fishing_logs l inner join tb_sign s on l.sign = s.id where s.fishing_ground = t.id) fishingCount,
+	(select IFNULL(sum(l.fishing_weight), 0) from tb_fishing_logs l inner join tb_sign s on l.sign = s.id where s.fishing_ground = t.id) fishingSumWeight,
+	(select IFNULL(max(l.fishing_weight), 0) from tb_fishing_logs l inner join tb_sign s on l.sign = s.id where s.fishing_ground = t.id) fishingMaxWeight,
+	ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN((t.latitude * PI() / 180 - t.mLatitude * PI() / 180) / 2),2) + COS(t.mLatitude * PI() / 180) *
+	COS(t.latitude * PI() / 180) * POW(SIN((t.longitude * PI() / 180 - t.mLongitude * PI() / 180) / 2),2))) * 1000) AS distance
+	from (select id,name,poster,city,longitude,latitude, #{longitude} mLongitude, #{mLatitude} mLatitudefrom tb_fishing_ground 
+	where wechat_audit = #{audit}
+	<if test="city != null">
+	 	and city = #{city}
+	</if>
+	<if test="type != null">
+		and type = #{type}
+	</if>
+	<if test="name != null">
+		and t.name like '%#{name}%'
+	</if>
+	) t
+	<if test="fishingCount != null">
+		order by fishingCount desc
+	</if>
+	<if test="userCount != null">
+		order by userCount desc
+	</if>
+	<if test="distance != null">
+		order by distance desc
+	</if>
+  </select>
  </mapper>

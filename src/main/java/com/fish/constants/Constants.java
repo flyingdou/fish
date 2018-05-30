@@ -17,6 +17,16 @@ public class Constants {
 	 * fish APP_SECRET
 	 */
 	public static String APP_SECRET = "c46624d7b33293cd30a7e008986e4cd2";
+	
+	/**
+	 * event APPID
+	 */
+	public static String APPID_EVENT = "wxbc83d7dbb3a30e14";
+	
+	/**
+	 * event APP_SECRET
+	 */
+	public static String APPID_SECRET_EVENT = "049c7653e2b44a72bbbee5c8e065b8be";
 
 	public static String GET_USERINFO_URL = " https://api.weixin.qq.com/sns/jscode2session?";
 

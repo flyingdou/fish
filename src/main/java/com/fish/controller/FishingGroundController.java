@@ -30,4 +30,17 @@ public class FishingGroundController {
 			return JSON.toJSONString(e);
 		}
 	}
+
+	@RequestMapping("/getFishingGroundList")
+	@ResponseBody
+	public String getFishingGroundList(String json) {
+		try {
+			JSONObject param = JSONObject.parseObject(URLDecoder.decode(json, "UTF-8"));
+			JSONObject result = fishingGroundService.getFishingGroundList(param);
+			return JSON.toJSONStringWithDateFormat(result, "yyyy-MM-dd HH:mm");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JSON.toJSONString(e);
+		}
+	}
 }

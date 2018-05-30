@@ -29,4 +29,11 @@ public interface FishingGroundMapper {
 	 * @return
 	 */
 	List<Map<String, Object>> getFishingGroundListByIdList(String ids);
+
+	/**
+	 * 查询钓场列表
+	 * 
+	 * @return
+	 */
+	List<Map<String, Object>> getFishingGroundList(Map<String, Object> queryParam);
 }

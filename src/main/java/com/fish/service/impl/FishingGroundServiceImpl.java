@@ -1,6 +1,8 @@
 package com.fish.service.impl;
 
 import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,10 +34,10 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 	public JSONObject release(JSONObject param) {
 		// 首先在微信中创建一个门店
 		// 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APPID_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传门店logo
-		String filePath = Constants.PICTURE_UPLOAD_PATH + "//" + "20180312250528.png";
+		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
 		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
 		filePath = uploadImageResult.getString("url");
 		// 收集参数, 调用创建微信门店方法
@@ -81,6 +83,27 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 
 		JSONObject result = new JSONObject();
 		result.fluentPut("success", true).fluentPut("fishingGround", fishingGround);
+		return result;
+	}
+
+	/**
+	 * 查询钓场列表
+	 */
+	@SuppressWarnings("unchecked")
+	public JSONObject getFishingGroundList(JSONObject param) {
+		param.fluentPut("audit", Constants.APPLY_STATUS_PASS);
+		if (param.containsKey("name")) {
+			if (param.containsKey("city")) {
+				param.remove("city");
+			}
+			if (param.containsKey("type")) {
+				param.remove("type");
+			}
+		}
+		Map<String, Object> queryParam = param.toJavaObject(Map.class);
+		List<Map<String, Object>> fishingGroundList = fishingGroundMapper.getFishingGroundList(queryParam);
+		JSONObject result = new JSONObject();
+		result.fluentPut("success", true).fluentPut("fishingGroundList", fishingGroundList);
 		return result;
 	}
 

@@ -40,7 +40,7 @@ public class TicketServiceImpl implements TicketService {
 	public JSONObject release(JSONObject param) {
 		// // 创建微信卡券
 		// // 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_TEST, Constants.APPID_SECRET_TEST);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APPID_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传卡券logo
 		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
@@ -63,9 +63,8 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("fixed_begin_term", 0);
 
 		// location_id_list
-		// List<String> poi_id_list =
-		// fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishGround"));
-		// location_id_list.addAll(poi_id_list);
+		List<String> poi_id_list = fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishGround"));
+		location_id_list.addAll(poi_id_list);
 
 		// base_info
 		base_info.fluentPut("logo_url", filePath).fluentPut("code_type", "CODE_TYPE_QRCODE")
@@ -74,11 +73,11 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("date_info", date_info).fluentPut("location_id_list", location_id_list);
 
 		// cash
-		cash.fluentPut("base_info", base_info);
+		cash.fluentPut("base_info", base_info).fluentPut("least_cost", 0)
+				.fluentPut("reduce_cost", param.get("price"));
 
 		// weChatCard
-		weChatCard.fluentPut("card_type", "CASH").fluentPut("cash", cash).fluentPut("least_cost", 0)
-				.fluentPut("reduce_cost", param.get("price"));
+		weChatCard.fluentPut("card_type", "CASH").fluentPut("cash", cash);
 
 		// createdWeChatTicket
 		createdWeChatTicketParam.fluentPut("card", weChatCard);

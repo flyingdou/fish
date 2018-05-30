@@ -40,10 +40,10 @@ public class TicketServiceImpl implements TicketService {
 	public JSONObject release(JSONObject param) {
 		// // 创建微信卡券
 		// // 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_TEST, Constants.APP_SECRET_TEST);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传卡券logo
-		String filePath = "d:java/picture/2018041080817.png";
+		String filePath = Constants.PICTURE_UPLOAD_PATH + "//" + "20180312250528.png";
 		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
 		filePath = uploadImageResult.getString("url");
 		// 调用创建微信卡券方法

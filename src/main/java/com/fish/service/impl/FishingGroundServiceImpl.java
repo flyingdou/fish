@@ -35,7 +35,7 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传门店logo
-		String filePath = "D:\\java\\picture\\20180312250528.png";
+		String filePath = Constants.PICTURE_UPLOAD_PATH + "//" + "20180312250528.png";
 		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
 		filePath = uploadImageResult.getString("url");
 		// 收集参数, 调用创建微信门店方法

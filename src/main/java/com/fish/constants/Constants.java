@@ -18,12 +18,6 @@ public class Constants {
 	 */
 	public static String APP_SECRET = "c46624d7b33293cd30a7e008986e4cd2";
 
-	/**
-	 * test APPI, APP_SECRET
-	 */
-	public static String APPID_TEST = "wx3fe7a3210eacd362";
-	public static String APP_SECRET_TEST = "743401935ef868a4bf3659133be6a82f";
-
 	public static String GET_USERINFO_URL = " https://api.weixin.qq.com/sns/jscode2session?";
 
 	/**

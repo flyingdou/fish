@@ -9,25 +9,29 @@ package com.fish.constants;
 public class Constants {
 
 	/**
-	 * fish APPID
+	 * fish APPID APP_SECRET
 	 */
 	public static String APPID = "wx2e8d35be5f888eb3";
 
-	/**
-	 * fish APP_SECRET
-	 */
 	public static String APP_SECRET = "c46624d7b33293cd30a7e008986e4cd2";
-	
+
 	/**
-	 * event APPID
+	 * event APPID APP_SECRET
 	 */
 	public static String APPID_EVENT = "wxbc83d7dbb3a30e14";
-	
-	/**
-	 * event APP_SECRET
-	 */
+
 	public static String APPID_SECRET_EVENT = "049c7653e2b44a72bbbee5c8e065b8be";
 
+	/**
+	 * 测试号
+	 */
+	public static String APPID_TEST = "wx3fe7a3210eacd362";
+
+	public static String APPID_SECRET_TEST = "049c7653e2b44a72bbbee5c8e065b8be";
+
+	/**
+	 * 获取用户信息URL
+	 */
 	public static String GET_USERINFO_URL = " https://api.weixin.qq.com/sns/jscode2session?";
 
 	/**

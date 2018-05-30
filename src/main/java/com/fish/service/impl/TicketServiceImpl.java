@@ -40,10 +40,10 @@ public class TicketServiceImpl implements TicketService {
 	public JSONObject release(JSONObject param) {
 		// // 创建微信卡券
 		// // 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_TEST, Constants.APPID_SECRET_TEST);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传卡券logo
-		String filePath = Constants.PICTURE_UPLOAD_PATH + "//" + "20180312250528.png";
+		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
 		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
 		filePath = uploadImageResult.getString("url");
 		// 调用创建微信卡券方法
@@ -63,8 +63,9 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("fixed_begin_term", 0);
 
 		// location_id_list
-		List<String> poi_id_list = fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishGround"));
-		location_id_list.addAll(poi_id_list);
+		// List<String> poi_id_list =
+		// fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishGround"));
+		// location_id_list.addAll(poi_id_list);
 
 		// base_info
 		base_info.fluentPut("logo_url", filePath).fluentPut("code_type", "CODE_TYPE_QRCODE")

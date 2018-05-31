@@ -33,4 +33,11 @@ public interface TicketService {
 	 * @return
 	 */
 	JSONObject getTicketById(JSONObject param);
+	
+	/**
+	 * 领取卡券
+	 * @param param
+	 * @return
+	 */
+	JSONObject addCard(JSONObject param);
 }

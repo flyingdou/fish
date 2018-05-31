@@ -171,4 +171,9 @@
 	from (select ft.id,ft.poster,ft.name,ft.period,ft.fit_fish_ground,ft.price,u.nick creator,ft.remark,
 	ft.auto_date 	from tb_fishing_ticket ft inner join tb_user u on ft.creator = u.id where ft.id = #{ticketId}) t
   </select>
+  
+  <!-- 通过id查询卡券card_id(微信卡券标识) -->
+  <select id="getTicketCardIdById" parameterType="String" resultType="String">
+  	select card_id from tb_fishing_ticket where id = #{ticketId}
+  </select>
 </mapper>

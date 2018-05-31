@@ -1,9 +1,15 @@
 package com.fish.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +46,7 @@ public class TicketServiceImpl implements TicketService {
 	public JSONObject release(JSONObject param) {
 		// // 创建微信卡券
 		// // 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APPID_SECRET_EVENT);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APP_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传卡券logo
 		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
@@ -73,8 +79,7 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("date_info", date_info).fluentPut("location_id_list", location_id_list);
 
 		// cash
-		cash.fluentPut("base_info", base_info).fluentPut("least_cost", 0)
-				.fluentPut("reduce_cost", param.get("price"));
+		cash.fluentPut("base_info", base_info).fluentPut("least_cost", 0).fluentPut("reduce_cost", param.get("price"));
 
 		// weChatCard
 		weChatCard.fluentPut("card_type", "CASH").fluentPut("cash", cash);
@@ -136,6 +141,85 @@ public class TicketServiceImpl implements TicketService {
 		// 返回json
 		JSONObject result = new JSONObject();
 		result.fluentPut("success", true).fluentPut("fishingTicket", fishingTicket);
+		return result;
+	}
+
+	/**
+	 * 领取卡券
+	 */
+	public JSONObject addCard(JSONObject param) {
+		// 请求access_token
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
+		String accessToken = getAccessTokenResult.getString("access_token");
+		// 获取卡券的card_id(微信卡券标识)
+		String card_id = fishingTicketMapper.getTicketCardIdById(param.getString("ticketId"));
+		JSONObject getApiTicketResult = WeChatAPI.getApiTicket(accessToken);
+		Map<String, Object> sign = sign(getApiTicketResult.getString("ticket"), card_id);
+		JSONObject result = new JSONObject(sign);
+		return result;
+	}
+
+	/**
+	 * @Description: 生成卡券需要的签名并返回参数
+	 * @param api_ticket：
+	 * @param cardId：需要领取的卡券的cardId
+	 * @return
+	 */
+	public static Map<String, Object> sign(String api_ticket, String cardId) {
+		Map<String, Object> ret = new HashMap<String, Object>();
+		String nonce_str = UUID.randomUUID().toString();
+		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+		String signature = "";
+
+		String param[] = new String[4];
+
+		param[0] = nonce_str;
+		param[1] = timestamp;
+		param[2] = api_ticket;
+		param[3] = cardId;
+
+		Arrays.sort(param);// 对参数的value值进行字符串的字典序排序
+
+		StringBuilder sb = new StringBuilder();
+		for (String b : param) {
+			sb.append(b);
+		}
+		// 对上面拼接的字符串进行sha1加密，得到signature
+		try {
+			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+			crypt.reset();
+			crypt.update(sb.toString().getBytes("UTF-8"));
+			signature = byteToHex(crypt.digest());
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		// 返回领取卡券需要的参数，其中nonceStr和timestamp必须和签名中的保持一致
+		ret.put("card_id", cardId);
+		ret.put("api_ticket", api_ticket);
+		ret.put("nonceStr", nonce_str);
+		ret.put("timestamp", timestamp);
+		ret.put("signature", signature);
+
+		return ret;
+	}
+
+	/*
+	 * 加密
+	 * 
+	 * @param hash
+	 * 
+	 * @return
+	 */
+	private static String byteToHex(final byte[] hash) {
+		Formatter formatter = new Formatter();
+		for (byte b : hash) {
+			formatter.format("%02x", b);
+		}
+		String result = formatter.toString();
+		formatter.close();
 		return result;
 	}
 

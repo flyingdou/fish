@@ -38,4 +38,12 @@ public interface FishingTicketMapper {
 	 * @return
 	 */
 	Map<String, Object> getTicketById(Map<String, Object> queryParam);
+
+	/**
+	 * 通过id查询卡券card_id(微信卡券标识)
+	 * 
+	 * @param ticketId
+	 * @return
+	 */
+	String getTicketCardIdById(String ticketId);
 }

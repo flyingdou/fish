@@ -20,14 +20,14 @@ public class Constants {
 	 */
 	public static String APPID_EVENT = "wxbc83d7dbb3a30e14";
 
-	public static String APPID_SECRET_EVENT = "049c7653e2b44a72bbbee5c8e065b8be";
+	public static String APP_SECRET_EVENT = "049c7653e2b44a72bbbee5c8e065b8be";
 
 	/**
 	 * 测试号
 	 */
 	public static String APPID_TEST = "wx3fe7a3210eacd362";
 
-	public static String APPID_SECRET_TEST = "743401935ef868a4bf3659133be6a82f";
+	public static String APP_SECRET_TEST = "743401935ef868a4bf3659133be6a82f";
 
 	/**
 	 * 获取用户信息URL

@@ -13,7 +13,6 @@ import com.fish.constants.Constants;
 import com.fish.dao.FishingGroundMapper;
 import com.fish.pojo.FishingGround;
 import com.fish.service.FishingGroundService;
-import com.fish.wechat.WeChatAPI;
 
 /**
  * 钓场业务接口实现类
@@ -32,32 +31,6 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 	 * 发布钓场
 	 */
 	public JSONObject release(JSONObject param) {
-		// 首先在微信中创建一个门店
-		// 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APPID_SECRET_EVENT);
-		String accessToken = getAccessTokenResult.getString("access_token");
-		// 上传门店logo
-		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
-		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
-		filePath = uploadImageResult.getString("url");
-		// 收集参数, 调用创建微信门店方法
-		JSONObject business = new JSONObject();
-		JSONObject base_info = new JSONObject();
-
-		// base_info
-		base_info.fluentPut("business_name", "鱼惑钓场").fluentPut("branch_name", param.get("name"))
-				.fluentPut("province", param.get("province")).fluentPut("city", param.get("city"))
-				.fluentPut("district", param.get("district")).fluentPut("address", param.get("address"))
-				.fluentPut("telephone", param.get("telephone")).fluentPut("categories", "旅游攻略")
-				.fluentPut("offset_type", 1).fluentPut("longitude", param.get("longitude"))
-				.fluentPut("latitude", param.get("latitude"));
-
-		// business
-		business.fluentPut("base_info", base_info);
-
-		// 创建微信门店
-		JSONObject createdWeChatStoreResult = WeChatAPI.createdWeChatStore(accessToken, business);
-
 		// 在本地生成一条钓场数据
 		FishingGround fishingGround = new FishingGround();
 		fishingGround.setPoster(param.getString("poster"));
@@ -74,7 +47,6 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 		fishingGround.setRemark(param.getString("remark"));
 		fishingGround.setCreator(param.getInteger("memberId"));
 		fishingGround.setCity(param.getString("city"));
-		fishingGround.setPoi_id(createdWeChatStoreResult.getString("poi_id"));
 		fishingGround.setWechat_audit(Constants.APPLY_STATUS_AUDITING);
 		fishingGround.setAutoDate(new Date());
 

@@ -55,4 +55,14 @@ public class WeChatAPI {
 		JSONObject createdWeChatStoreResult = HttpRequestUtils.httpPost(createdWeChatStoreURL, param);
 		return createdWeChatStoreResult;
 	}
+
+	/**
+	 * 获取领取微信卡券的token
+	 */
+	public static JSONObject getApiTicket(String accessToken) {
+		String getApiTicketURL = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=" + accessToken
+				+ "&type=wx_card";
+		JSONObject getApiTicketResult = HttpRequestUtils.httpGet(getApiTicketURL);
+		return getApiTicketResult;
+	}
 }

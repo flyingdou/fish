@@ -79,4 +79,17 @@ public class TicketController {
 		}
 	}
 
+	@RequestMapping("/addCard")
+	@ResponseBody
+	public String addCard(String json) {
+		try {
+			JSONObject param = JSONObject.parseObject(URLDecoder.decode(json, "UTF-8"));
+			JSONObject result = ticketService.addCard(param);
+			return JSON.toJSONString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JSON.toJSONString(e);
+		}
+	}
+
 }

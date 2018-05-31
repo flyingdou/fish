@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ReceiveWeChatController {
 
 	@RequestMapping("/receive")
-	public String receive() {
-
-		return null;
+	public String receive(String echostr) {
+		return echostr;
 	}
 }

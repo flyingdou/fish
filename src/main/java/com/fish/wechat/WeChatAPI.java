@@ -87,7 +87,7 @@ public class WeChatAPI {
 	 * @return
 	 */
 	public static JSONObject consumeWeChatCard(String accessToken, JSONObject param) {
-		String consumeWeChatCardURL = "https://api.weixin.qq.com/card/code/consume?access_token=" + param;
+		String consumeWeChatCardURL = "https://api.weixin.qq.com/card/code/consume?access_token=" + accessToken;
 		JSONObject consumeWeChatCardResult = HttpRequestUtils.httpPost(consumeWeChatCardURL, param);
 		return consumeWeChatCardResult;
 	}

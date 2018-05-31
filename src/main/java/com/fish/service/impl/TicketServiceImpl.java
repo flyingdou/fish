@@ -5,7 +5,6 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.Formatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -149,7 +148,7 @@ public class TicketServiceImpl implements TicketService {
 	 */
 	public JSONObject addCard(JSONObject param) {
 		// 请求access_token
-		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID, Constants.APP_SECRET);
+		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APP_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 获取卡券的card_id(微信卡券标识)
 		String card_id = fishingTicketMapper.getTicketCardIdById(param.getString("ticketId"));
@@ -186,10 +185,21 @@ public class TicketServiceImpl implements TicketService {
 		}
 		// 对上面拼接的字符串进行sha1加密，得到signature
 		try {
+			char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
 			MessageDigest crypt = MessageDigest.getInstance("SHA-1");
 			crypt.reset();
 			crypt.update(sb.toString().getBytes("UTF-8"));
-			signature = byteToHex(crypt.digest());
+
+			byte[] md = crypt.digest();
+			int j = md.length;
+			char buf[] = new char[j * 2];
+			int k = 0;
+			for (int i = 0; i < j; i++) {
+				byte byte0 = md[i];
+				buf[k++] = hexDigits[byte0 >>> 4 & 0xf];
+				buf[k++] = hexDigits[byte0 & 0xf];
+			}
+			signature = new String(buf);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -204,23 +214,6 @@ public class TicketServiceImpl implements TicketService {
 		ret.put("signature", signature);
 
 		return ret;
-	}
-
-	/*
-	 * 加密
-	 * 
-	 * @param hash
-	 * 
-	 * @return
-	 */
-	private static String byteToHex(final byte[] hash) {
-		Formatter formatter = new Formatter();
-		for (byte b : hash) {
-			formatter.format("%02x", b);
-		}
-		String result = formatter.toString();
-		formatter.close();
-		return result;
 	}
 
 }

@@ -177,8 +177,10 @@ public class TicketServiceImpl implements TicketService {
 		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APP_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 查询code
-		param.fluentPut("check_consume", true);
-		JSONObject checkCodeResult = WeChatAPI.checkCode(accessToken, param);
+		JSONObject requestParam = new JSONObject();
+		requestParam.fluentPut("code", param.get("code"));
+		requestParam.fluentPut("check_consume", true);
+		JSONObject checkCodeResult = WeChatAPI.checkCode(accessToken, requestParam);
 		// 检查卡券状态卡券状态
 		if (checkCodeResult.getIntValue("errcode") > 0 && !checkCodeResult.getBooleanValue("can_consume")) {
 			result.fluentPut("success", false).fluentPut("message", "卡券状态异常或卡券已过期");
@@ -188,7 +190,8 @@ public class TicketServiceImpl implements TicketService {
 			result.fluentPut("success", false).fluentPut("message", "您当前无权核销此卡券");
 		}
 		// 通过检查,核销卡券
-		JSONObject consumeWeChatCardResult = WeChatAPI.consumeWeChatCard(accessToken, param);
+		requestParam.remove("check_consume");
+		JSONObject consumeWeChatCardResult = WeChatAPI.consumeWeChatCard(accessToken, requestParam);
 		if (consumeWeChatCardResult.getIntValue("errcode") == 0) {
 			result.fluentPut("succes", true).fluentPut("message", "核销成功");
 		} else {

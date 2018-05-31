@@ -146,15 +146,54 @@ public class TicketServiceImpl implements TicketService {
 	/**
 	 * 领取卡券
 	 */
+	@SuppressWarnings("unchecked")
 	public JSONObject addCard(JSONObject param) {
+		if (param.containsKey("code")) {
+			Map<String, Object> addParam = param.toJavaObject(Map.class);
+			fishingTicketMapper.addUserTicket(addParam);
+			return new JSONObject().fluentPut("success", true);
+		} else {
+			// 请求access_token
+			JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT,
+					Constants.APP_SECRET_EVENT);
+			String accessToken = getAccessTokenResult.getString("access_token");
+			// 获取卡券的card_id(微信卡券标识)
+			String card_id = fishingTicketMapper.getTicketCardIdById(param.getString("ticketId"));
+			JSONObject getApiTicketResult = WeChatAPI.getApiTicket(accessToken);
+			Map<String, Object> sign = sign(getApiTicketResult.getString("ticket"), card_id);
+			return new JSONObject(sign);
+		}
+	}
+
+	/**
+	 * 核销卡券
+	 * 
+	 * @param param
+	 * @return
+	 */
+	public JSONObject consume(JSONObject param) {
+		JSONObject result = new JSONObject();
 		// 请求access_token
 		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APP_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
-		// 获取卡券的card_id(微信卡券标识)
-		String card_id = fishingTicketMapper.getTicketCardIdById(param.getString("ticketId"));
-		JSONObject getApiTicketResult = WeChatAPI.getApiTicket(accessToken);
-		Map<String, Object> sign = sign(getApiTicketResult.getString("ticket"), card_id);
-		JSONObject result = new JSONObject(sign);
+		// 查询code
+		param.fluentPut("check_consume", true);
+		JSONObject checkCodeResult = WeChatAPI.checkCode(accessToken, param);
+		// 检查卡券状态卡券状态
+		if (checkCodeResult.getIntValue("errcode") > 0 && !checkCodeResult.getBooleanValue("can_consume")) {
+			result.fluentPut("success", false).fluentPut("message", "卡券状态异常或卡券已过期");
+		}
+		// 检查当前用户是否具有核销卡券的权限
+		if (fishingTicketMapper.checkConsumeAuthority(param) < 0) {
+			result.fluentPut("success", false).fluentPut("message", "您当前无权核销此卡券");
+		}
+		// 通过检查,核销卡券
+		JSONObject consumeWeChatCardResult = WeChatAPI.consumeWeChatCard(accessToken, param);
+		if (consumeWeChatCardResult.getIntValue("errcode") == 0) {
+			result.fluentPut("succes", true).fluentPut("message", "核销成功");
+		} else {
+			result.fluentPut("success", false).fluentPut("message", consumeWeChatCardResult.get("errmsg"));
+		}
 		return result;
 	}
 
@@ -164,7 +203,7 @@ public class TicketServiceImpl implements TicketService {
 	 * @param cardId：需要领取的卡券的cardId
 	 * @return
 	 */
-	public static Map<String, Object> sign(String api_ticket, String cardId) {
+	private static Map<String, Object> sign(String api_ticket, String cardId) {
 		Map<String, Object> ret = new HashMap<String, Object>();
 		String nonce_str = UUID.randomUUID().toString();
 		String timestamp = String.valueOf(System.currentTimeMillis() / 1000);

@@ -11,6 +11,7 @@ import java.security.Key;
 import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,12 +21,15 @@ import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
 public class commentsUtil {
-	
-	
+
 	// 算法名
 	public static final String KEY_NAME = "AES";
 	// 加解密算法/模式/填充方式
@@ -91,10 +95,6 @@ public class commentsUtil {
 		cipher.init(Cipher.DECRYPT_MODE, key, iv);
 		return cipher.doFinal(encryptedData);
 	}
-	
-	
-	
-	
 
 	/**
 	 * 日期格式化
@@ -141,7 +141,7 @@ public class commentsUtil {
 		}
 		return list;
 	}
-	
+
 	/**
 	 * 把String转成Date
 	 * 
@@ -157,7 +157,7 @@ public class commentsUtil {
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 获取随机数字编号(指定位数)
 	 * 
@@ -171,8 +171,7 @@ public class commentsUtil {
 		}
 		return dateFormat(new Date(), "yyyyMMdd") + Math.round(Math.random() * Multiple);
 	}
-	
-	
+
 	/**
 	 * 从解密数据中获取需要的字段
 	 * 
@@ -194,9 +193,10 @@ public class commentsUtil {
 		}
 		return "";
 	}
-	
+
 	/**
 	 * 通过URL下载图片
+	 * 
 	 * @param urlString
 	 * @param filename
 	 * @param savePath
@@ -230,6 +230,36 @@ public class commentsUtil {
 		os.close();
 		is.close();
 	}
-	
-	
+
+	/**
+	 * 获取reques流中的xml转换成map
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public static Map<String, Object> getInputStreamXMLToMap(HttpServletRequest request) {
+		// 解析结果存储在HashMap
+		Map<String, Object> map = new HashMap<String, Object>();
+		try {
+			InputStream inputStream = request.getInputStream();
+			// 读取输入流
+			SAXReader reader = new SAXReader();
+			Document document = reader.read(inputStream);
+			// 得到xml根元素
+			Element root = document.getRootElement();
+			// 得到根元素的所有子节点
+			List<Element> elementList = root.elements();
+			// 遍历所有子节点
+			for (Element e : elementList) {
+				map.put(e.getName(), e.getText());
+			}
+			// 释放资源
+			inputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return map;
+	}
+
 }

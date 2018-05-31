@@ -46,4 +46,20 @@ public interface FishingTicketMapper {
 	 * @return
 	 */
 	String getTicketCardIdById(String ticketId);
+
+	/**
+	 * 添加一张用户卡券数据
+	 * 
+	 * @param addParam
+	 * @return
+	 */
+	int addUserTicket(Map<String, Object> addParam);
+
+	/**
+	 * 检查是否具有核销卡券的权限
+	 * 
+	 * @param queryParam
+	 * @return
+	 */
+	int checkConsumeAuthority(Map<String, Object> queryParam);
 }

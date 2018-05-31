@@ -176,4 +176,17 @@
   <select id="getTicketCardIdById" parameterType="String" resultType="String">
   	select card_id from tb_fishing_ticket where id = #{ticketId}
   </select>
+  
+  <!-- 添加一张用户卡券数据 -->
+  <insert id="addUserTicket" parameterType="Map">
+  	insert into tb_user_ticket(user, card_id, code) values(#{user}, #{cardId}, #{code})
+  </insert>
+  
+  <!-- 检查是否具有核销卡券的权限 -->
+  <select id="checkConsumeAuthority" parameterType="Map" resultType="int">
+  	select count(t.id) from tb_fishing_ticket t inner join tb_user_ticket ut 
+	on t.card_id = ut.card_id where t.fit_fish_ground in ( 
+		select id from tb_fishing_ground where owner = #{user}
+	) and code = #{code}
+  </select>
 </mapper>

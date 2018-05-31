@@ -65,4 +65,30 @@ public class WeChatAPI {
 		JSONObject getApiTicketResult = HttpRequestUtils.httpGet(getApiTicketURL);
 		return getApiTicketResult;
 	}
+
+	/**
+	 * 检查微信卡券code是否有效
+	 * 
+	 * @param accessToken
+	 * @param param
+	 * @return
+	 */
+	public static JSONObject checkCode(String accessToken, JSONObject param) {
+		String checkCodeURL = "https://api.weixin.qq.com/card/code/get?access_token=" + accessToken;
+		JSONObject checkCodeResult = HttpRequestUtils.httpPost(checkCodeURL, param);
+		return checkCodeResult;
+	}
+
+	/**
+	 * 核销微信卡券
+	 * 
+	 * @param accessToken
+	 * @param param
+	 * @return
+	 */
+	public static JSONObject consumeWeChatCard(String accessToken, JSONObject param) {
+		String consumeWeChatCardURL = "https://api.weixin.qq.com/card/code/consume?access_token=" + param;
+		JSONObject consumeWeChatCardResult = HttpRequestUtils.httpPost(consumeWeChatCardURL, param);
+		return consumeWeChatCardResult;
+	}
 }

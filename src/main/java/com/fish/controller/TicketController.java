@@ -79,12 +79,37 @@ public class TicketController {
 		}
 	}
 
+	/**
+	 * 领取卡券
+	 * 
+	 * @param json
+	 * @return
+	 */
 	@RequestMapping("/addCard")
 	@ResponseBody
 	public String addCard(String json) {
 		try {
 			JSONObject param = JSONObject.parseObject(URLDecoder.decode(json, "UTF-8"));
 			JSONObject result = ticketService.addCard(param);
+			return JSON.toJSONString(result);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JSON.toJSONString(e);
+		}
+	}
+
+	/**
+	 * 核销卡券
+	 * 
+	 * @param param
+	 * @return
+	 */
+	@RequestMapping("/consume")
+	@ResponseBody
+	public String consume(String json) {
+		try {
+			JSONObject param = JSONObject.parseObject(URLDecoder.decode(json, "UTF-8"));
+			JSONObject result = ticketService.consume(param);
 			return JSON.toJSONString(result);
 		} catch (Exception e) {
 			e.printStackTrace();

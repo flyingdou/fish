@@ -40,4 +40,12 @@ public interface TicketService {
 	 * @return
 	 */
 	JSONObject addCard(JSONObject param);
+	
+	/**
+	 * 核销卡券
+	 * 
+	 * @param param
+	 * @return
+	 */
+	JSONObject consume(JSONObject param);
 }

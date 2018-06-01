@@ -161,13 +161,8 @@
   	select t.*,(select count(id) from tb_order where product_type = #{productType} and product_id = t.id) sell_out,
 	(select count(id) from tb_fishing_ground where id in(t.fit_fish_ground)) fit_fish_gound_count
 	from (select id,poster,name,period,fit_fish_ground,price,creator,remark,auto_date 
-	from tb_fishing_ticket where is_open = #{isOpen} and `status` = #{status} 
-	<if test="city != null">
-		and city = #{city}
-	</if>
-	<if test="name != null">
-		and name like '%${name}%'
-	</if>
+	from tb_fishing_ticket where is_open = #{isOpen} and `status` = #{status} and 
+	(select count(id) from tb_fishing_ground where id in(fit_fish_ground) and city = #{city}) > 0
 	) t
   </select>
   

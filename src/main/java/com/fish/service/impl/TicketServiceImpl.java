@@ -68,7 +68,7 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("fixed_begin_term", 0);
 
 		// location_id_list
-		List<String> poi_id_list = fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishGround"));
+		List<String> poi_id_list = fishingGroundMapper.getPoiIdListByIdList(param.getString("fitFishingGround"));
 		location_id_list.addAll(poi_id_list);
 
 		// base_info
@@ -78,7 +78,8 @@ public class TicketServiceImpl implements TicketService {
 				.fluentPut("date_info", date_info).fluentPut("location_id_list", location_id_list);
 
 		// cash
-		cash.fluentPut("base_info", base_info).fluentPut("least_cost", 0).fluentPut("reduce_cost", param.get("price"));
+		cash.fluentPut("base_info", base_info).fluentPut("least_cost", 0).fluentPut("reduce_cost",
+				param.getDouble("price") * 100);
 
 		// weChatCard
 		weChatCard.fluentPut("card_type", "CASH").fluentPut("cash", cash);
@@ -92,7 +93,7 @@ public class TicketServiceImpl implements TicketService {
 		fishingTicket.setPoster(param.getString("poster"));
 		fishingTicket.setName(param.getString("name"));
 		fishingTicket.setPeriod(param.getInteger("period"));
-		fishingTicket.setFitFishGround(param.getString("fitFishGround"));
+		fishingTicket.setFitFishGround(param.getString("fitFishingGround"));
 		fishingTicket.setPrice(param.getBigDecimal("price"));
 		fishingTicket.setCreator(param.getInteger("creator"));
 		fishingTicket.setRemark(param.getString("remark"));

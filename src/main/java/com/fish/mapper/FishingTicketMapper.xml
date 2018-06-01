@@ -163,6 +163,9 @@
 	from (select id,poster,name,period,fit_fish_ground,price,creator,remark,auto_date 
 	from tb_fishing_ticket where is_open = #{isOpen} and `status` = #{status} and 
 	(select count(id) from tb_fishing_ground where id in(fit_fish_ground) and city = #{city}) > 0
+	<if test="name != null">
+		and name like '%${name}%'
+	</if>
 	) t
   </select>
   
@@ -171,11 +174,7 @@
   	select t.*,(select count(id) from tb_order where product_type = #{productType} and product_id = t.id) sell_out,
 	(select count(id) from tb_fishing_ground where id in(t.fit_fish_ground)) fit_fish_gound_count
 	from (select ft.id,ft.poster,ft.name,ft.period,ft.fit_fish_ground,ft.price,u.nick creator,ft.remark,
-	ft.auto_date 	from tb_fishing_ticket ft inner join tb_user u on ft.creator = u.id where ft.id = #{ticketId}
-	<if test="name != null">
-		and name like '%${name}%'
-	</if>
-	) t
+	ft.auto_date 	from tb_fishing_ticket ft inner join tb_user u on ft.creator = u.id where ft.id = #{ticketId}) t
   </select>
   
   <!-- 通过id查询卡券card_id(微信卡券标识) -->

@@ -61,7 +61,6 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 	/**
 	 * 查询钓场列表
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONObject getFishingGroundList(JSONObject param) {
 		param.fluentPut("audit", Constants.APPLY_STATUS_PASS);
 		if (param.containsKey("name")) {
@@ -72,8 +71,7 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 				param.remove("type");
 			}
 		}
-		Map<String, Object> queryParam = param.toJavaObject(Map.class);
-		List<Map<String, Object>> fishingGroundList = fishingGroundMapper.getFishingGroundList(queryParam);
+		List<Map<String, Object>> fishingGroundList = fishingGroundMapper.getFishingGroundList(param);
 		JSONObject result = new JSONObject();
 		result.fluentPut("success", true).fluentPut("fishingGroundList", fishingGroundList);
 		return result;

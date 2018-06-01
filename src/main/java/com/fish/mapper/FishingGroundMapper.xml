@@ -239,6 +239,9 @@
 	COS(t.latitude * PI() / 180) * POW(SIN((t.longitude * PI() / 180 - t.mLongitude * PI() / 180) / 2),2))) * 1000) AS distance
 	from (select id,name,poster,city,longitude,latitude, #{longitude} mLongitude, #{mLatitude} mLatitudefrom tb_fishing_ground 
 	where wechat_audit = #{audit}
+	<if test="user != null">
+		and owner = #{user}
+	</if>
 	<if test="city != null">
 	 	and city = #{city}
 	</if>

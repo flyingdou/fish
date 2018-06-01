@@ -6,14 +6,13 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.fish.constants.Constants;
 import com.fish.util.commentsUtil;
-
-import net.sf.json.JSONObject;
 
 @Controller
 public class UploadController {
@@ -48,9 +47,9 @@ public class UploadController {
 	 */
 	@RequestMapping("/uploadFile")
 	@ResponseBody
-	public JSONObject uploadFile(@RequestParam MultipartFile myfile) {
-		JSONObject result = new JSONObject();
+	public String uploadFile(MultipartFile myfile) {
 		try {
+			JSONObject result = new JSONObject();
 			// 这里的路径(可以自定义)是tomcat安装路径/webapps/项目名/picture/
 			String filePath = Constants.PICTURE_UPLOAD_PATH;
 			// 获取图片上传的文件路径
@@ -62,19 +61,19 @@ public class UploadController {
 			// 需要返回的文件名
 			String originalFilename = null;
 			// 生成新的文件名
-			String suiff = myfile.getOriginalFilename().substring(myfile.getOriginalFilename().lastIndexOf(".") - 1,
+			String suiff = myfile.getOriginalFilename().substring(myfile.getOriginalFilename().lastIndexOf("."),
 					myfile.getOriginalFilename().length());
 			originalFilename = commentsUtil.dateFormat(new Date(), "yyyyMMdd") + commentsUtil.getRandomName(4) + suiff;
 			// 这里不必处理IO流关闭的问题,因为FileUtils.copyInputStreamToFile()方法内部会自动把用到的IO流关掉
 			// 此处也可以使用Spring提供的MultipartFile.transferTo(File dest)方法实现文件的上传
 			FileUtils.copyInputStreamToFile(myfile.getInputStream(), new File(filePath, originalFilename));
 			// 图片压缩
-			result.accumulate("success", true).accumulate("picture", originalFilename);
+			result.fluentPut("success", true).fluentPut("picture", originalFilename);
+			return JSON.toJSONString(result);
 		} catch (Exception e) {
 			e.printStackTrace();
-			result.accumulate("success", false).accumulate("msg", e.getMessage());
+			return JSON.toJSONString(e);
 		}
-		return result;
 	}
 
 	// /**

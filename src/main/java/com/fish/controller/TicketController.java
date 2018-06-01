@@ -59,10 +59,6 @@ public class TicketController {
 			e.printStackTrace();
 			return JSON.toJSONString(e);
 		}
-		
-		
-		
-		
 	}
 
 	/**

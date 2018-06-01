@@ -75,7 +75,6 @@ public class FishingGroundServiceImpl implements FishingGroundService {
 		JSONObject result = new JSONObject();
 		result.fluentPut("success", true).fluentPut("fishingGroundList", fishingGroundList);
 		return result;
-		
 	}
 
 }

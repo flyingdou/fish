@@ -237,7 +237,7 @@
 	(select IFNULL(max(l.fishing_weight), 0) from tb_fishing_logs l inner join tb_sign s on l.sign = s.id where s.fishing_ground = t.id) fishingMaxWeight,
 	ROUND(6378.138 * 2 * ASIN(SQRT(POW(SIN((t.latitude * PI() / 180 - t.mLatitude * PI() / 180) / 2),2) + COS(t.mLatitude * PI() / 180) *
 	COS(t.latitude * PI() / 180) * POW(SIN((t.longitude * PI() / 180 - t.mLongitude * PI() / 180) / 2),2))) * 1000) AS distance
-	from (select id,name,poster,city,longitude,latitude, #{longitude} mLongitude, #{mLatitude} mLatitude from tb_fishing_ground 
+	from (select id,name,poster,city,longitude,latitude, #{longitude} mLongitude, #{latitude} mLatitude from tb_fishing_ground 
 	where wechat_audit = #{audit}
 	<if test="user != null">
 		and owner = #{user}

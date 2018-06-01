@@ -50,9 +50,10 @@ public class TicketController {
 	 */
 	@RequestMapping("/getTicketList")
 	@ResponseBody
-	public String getTicketList() {
+	public String getTicketList(String json) {
 		try {
-			JSONObject result = ticketService.getTicketList();
+			JSONObject param = JSONObject.parseObject(URLDecoder.decode(json, "UTF-8"));
+			JSONObject result = ticketService.getTicketList(param);
 			return JSON.toJSONStringWithDateFormat(result, "yyyy-MM-dd HH:mm");
 		} catch (Exception e) {
 			e.printStackTrace();

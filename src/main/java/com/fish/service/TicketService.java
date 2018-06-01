@@ -24,7 +24,7 @@ public interface TicketService {
 	 * @param param
 	 * @return
 	 */
-	JSONObject getTicketList();
+	JSONObject getTicketList(JSONObject param);
 
 	/**
 	 * 通过Id查询垂钓券

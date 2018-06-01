@@ -48,7 +48,7 @@ public class TicketServiceImpl implements TicketService {
 		JSONObject getAccessTokenResult = WeChatAPI.getAccessToken(Constants.APPID_EVENT, Constants.APP_SECRET_EVENT);
 		String accessToken = getAccessTokenResult.getString("access_token");
 		// 上传卡券logo
-		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + "20180312250528.png";
+		String filePath = Constants.PICTURE_UPLOAD_PATH + "/" + param.getString("poster");
 		JSONObject uploadImageResult = WeChatAPI.uploadImageToWechatServer(accessToken, filePath);
 		filePath = uploadImageResult.getString("url");
 		// 调用创建微信卡券方法
@@ -61,7 +61,7 @@ public class TicketServiceImpl implements TicketService {
 		JSONArray location_id_list = new JSONArray();
 
 		// sku
-		sku.fluentPut("quantity", 10);
+		sku.fluentPut("quantity", 50);
 
 		// date_info
 		date_info.fluentPut("type", "DATE_TYPE_FIX_TERM").fluentPut("fixed_term", param.getInteger("period"))
@@ -98,7 +98,7 @@ public class TicketServiceImpl implements TicketService {
 		fishingTicket.setRemark(param.getString("remark"));
 		fishingTicket.setCardId(createdWeChatTicketResult.getString("card_id"));
 		fishingTicket.setIsOpen(Constants.OPEN_STATUS);
-		fishingTicket.setStatus(Constants.APPLY_STATUS_AUDITING);
+		fishingTicket.setStatus(Constants.APPLY_STATUS_PASS);
 		fishingTicket.setAuto_date(new Date());
 
 		// 保存到数据库
@@ -112,15 +112,12 @@ public class TicketServiceImpl implements TicketService {
 	/**
 	 * 查询垂钓券列表
 	 */
-	public JSONObject getTicketList() {
-		Map<String, Object> queryParam = new HashMap<String, Object>();
-		queryParam.put("productType", Constants.PRODUCT_TYPE_TICKET);
-		queryParam.put("isOpen", Constants.OPEN_STATUS);
-		queryParam.put("status", Constants.APPLY_STATUS_PASS);
-
+	public JSONObject getTicketList(JSONObject param) {
+		param.fluentPut("productType", Constants.PRODUCT_TYPE_TICKET).fluentPut("isOpen", Constants.OPEN_STATUS)
+				.fluentPut("status", Constants.APPLY_STATUS_PASS)
+				.fluentPut("productType", Constants.PRODUCT_TYPE_TICKET);
 		// 查询所有有效的优惠券列表
-		List<Map<String, Object>> ticketList = fishingTicketMapper.getEffectiveTikcetList(queryParam);
-
+		List<Map<String, Object>> ticketList = fishingTicketMapper.getEffectiveTikcetList(param);
 		JSONObject result = new JSONObject();
 		result.fluentPut("success", true).fluentPut("ticketList", ticketList);
 		return result;
@@ -146,11 +143,9 @@ public class TicketServiceImpl implements TicketService {
 	/**
 	 * 领取卡券
 	 */
-	@SuppressWarnings("unchecked")
 	public JSONObject addCard(JSONObject param) {
 		if (param.containsKey("code")) {
-			Map<String, Object> addParam = param.toJavaObject(Map.class);
-			fishingTicketMapper.addUserTicket(addParam);
+			fishingTicketMapper.addUserTicket(param);
 			return new JSONObject().fluentPut("success", true);
 		} else {
 			// 请求access_token

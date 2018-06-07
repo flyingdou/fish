@@ -2,7 +2,6 @@ package com.fish.wechat;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.fish.pojo.User;
 import com.fish.util.HttpRequestUtils;
 
 /**
@@ -47,7 +46,7 @@ public class GetUserInfoResponse {
 		JSONObject ret = new JSONObject();
 		GetUserInfoRequest request = new GetUserInfoRequest(code);
 		ret = HttpRequestUtils.httpGet(request.getHttp_url());
-		return JSON.toJavaObject(ret, User.class);
+		return JSON.toJavaObject(ret, GetUserInfoResponse.class);
 	}
 
 }

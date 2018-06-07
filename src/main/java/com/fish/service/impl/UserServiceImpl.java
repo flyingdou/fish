@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,8 +69,12 @@ public class UserServiceImpl implements UserService {
 			user.setWechatId(unionId);
 			user.setScore(0);
 			user.setType("0");
-			user.setProvince(userInfo.getString("province"));
-			user.setCity(userInfo.getString("city"));
+			if (StringUtils.isNotEmpty(userInfo.getString("province"))) {
+				user.setProvince(userInfo.getString("province"));
+			}
+			if (StringUtils.isNotEmpty(userInfo.getString("city"))) {
+				user.setCity(userInfo.getString("city"));
+			}
 			
 			// 持久化数据
 			userMaper.insertSelective(user);

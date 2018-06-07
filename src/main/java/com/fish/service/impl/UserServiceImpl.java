@@ -66,6 +66,10 @@ public class UserServiceImpl implements UserService {
 			user.setRegisterDate(new Date());
 			user.setLoginDate(new Date());
 			user.setWechatId(unionId);
+			user.setScore(0);
+			user.setType("0");
+			user.setProvince(userInfo.getString("province"));
+			user.setCity(userInfo.getString("city"));
 			
 			// 持久化数据
 			userMaper.insertSelective(user);

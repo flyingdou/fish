@@ -1,10 +1,15 @@
 package com.fish.util;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URLDecoder;
 
+import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -215,5 +220,49 @@ public class HttpRequestUtils {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	/**
+	 * http请求
+	 * 
+	 * @param url
+	 * @param param
+	 * @return
+	 */
+	public static String httpRequestToString(String url, String param) {
+		// 创建httpclient工具对象
+		HttpClient client = new HttpClient();
+		// 创建post请求方法
+		PostMethod myPost = new PostMethod(url);
+		try {
+			// 设置post请求参数
+			// 设置请求头部类型
+			myPost.setRequestHeader("Content-Type", "text/xml");
+			myPost.setRequestHeader("charset", "utf-8");
+			// 设置请求体，即xml文本内容，一种是直接获取xml内容字符串，一种是读取xml文件以流的形式
+			myPost.setRequestBody(param);
+			int statusCode = client.executeMethod(myPost);
+			// url = URLDecoder.decode(url, "UTF-8");
+			// 请求发送成功，并得到响应
+			if (statusCode == 200) {
+				String str = "";
+				try {
+					// 读取服务器返回过来的json字符串数据
+					// str = EntityUtils.toString(result.getEntity());
+					InputStream inputStream = myPost.getResponseBodyAsStream();
+					BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, "utf-8"));
+					StringBuffer stringBuffer = new StringBuffer();
+					while ((str = br.readLine()) != null) {
+						stringBuffer.append(str);
+					}
+					return stringBuffer.toString();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

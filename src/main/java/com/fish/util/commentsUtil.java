@@ -8,6 +8,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.AlgorithmParameters;
 import java.security.Key;
+import java.security.MessageDigest;
 import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -261,5 +262,69 @@ public class commentsUtil {
 
 		return map;
 	}
+	
+	/**
+	 * 获取客户端公网ip
+	 */
+	public static String getIpAddr(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+			// 多次反向代理后会有多个ip值，第一个ip才是真实ip
+			if (ip.indexOf(",") != -1) {
+				ip = ip.split(",")[0];
+			}
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+			System.out.println("Proxy-Client-IP ip: " + ip);
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+			System.out.println("WL-Proxy-Client-IP ip: " + ip);
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_CLIENT_IP");
+			System.out.println("HTTP_CLIENT_IP ip: " + ip);
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+			System.out.println("HTTP_X_FORWARDED_FOR ip: " + ip);
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("X-Real-IP");
+			System.out.println("X-Real-IP ip: " + ip);
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+			System.out.println("getRemoteAddr ip: " + ip);
+		}
+		return ip;
+	}
 
+	
+	/**
+	 * MD5加密
+	 * 
+	 * @param buffer
+	 * @return
+	 */
+	public final static String MD5(String buffer) {
+		char hexDigits[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f' };
+		try {
+			MessageDigest mdTemp = MessageDigest.getInstance("MD5");
+			mdTemp.update(buffer.getBytes("UTF-8"));
+			byte[] md = mdTemp.digest();
+			int j = md.length;
+			char str[] = new char[j * 2];
+			int k = 0;
+			for (int i = 0; i < j; i++) {
+				byte byte0 = md[i];
+				str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+				str[k++] = hexDigits[byte0 & 0xf];
+			}
+			return new String(str);
+		} catch (Exception e) {
+			return null;
+		}
+	}
 }

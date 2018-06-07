@@ -56,11 +56,11 @@ public class UserServiceImpl implements UserService {
 		user = userMaper.getUserByWechatid(queryMap);
 		
 		if (user == null || user.getId() == null) {
+			user = new User();
 			// 新用户，注册操作
 			String fileName = commentsUtil.dateFormat(new Date(), "yyyyMMdd") + commentsUtil.getRandomName(4) + ".jpg";
 			commentsUtil.download(userInfo.getString("avatarUrl"), fileName, Constants.PICTURE_UPLOAD_PATH);
 			user.setNick(userInfo.getString("nickName"));
-		
 			user.setImage(fileName);
 			user.setSex("1".equals(userInfo.getString("gender")) ? Constants.USER_SEX_MALE : Constants.USER_SEX_FEMALE);
 			user.setRegisterDate(new Date());

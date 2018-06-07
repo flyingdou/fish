@@ -23,7 +23,7 @@ import com.fish.wechat.GetUserInfoResponse;
  */
 @Service
 @Transactional
-public class UserServiceImple implements UserService {
+public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserMapper userMaper;

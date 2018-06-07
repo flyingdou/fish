@@ -32,7 +32,7 @@ public class Constants {
 	/**
 	 * 获取用户信息URL
 	 */
-	public static String GET_USERINFO_URL = " https://api.weixin.qq.com/sns/jscode2session?";
+	public static String GET_USERINFO_URL = "https://api.weixin.qq.com/sns/jscode2session?";
 
 	/**
 	 * 开启
